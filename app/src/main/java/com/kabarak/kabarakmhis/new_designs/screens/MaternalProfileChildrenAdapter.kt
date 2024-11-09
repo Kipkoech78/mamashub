@@ -29,6 +29,7 @@ import com.kabarak.kabarakmhis.new_designs.tetanus_diptheria.PreventiveServiceLi
 import com.kabarak.kabarakmhis.new_designs.weight_monitoring.WeightMonitoringChart
 import com.kabarak.kabarakmhis.pnc.ChildBirthView
 import com.kabarak.kabarakmhis.pnc.ChildViewActivity
+import com.kabarak.kabarakmhis.pnc.babyTeethRecord.BabyTeethViewRecord
 
 
 class MaternalProfileChildrenAdapter(private var entryList: ArrayList<DbMaternalProfileChild>,
@@ -118,7 +119,7 @@ class MaternalProfileChildrenAdapter(private var entryList: ArrayList<DbMaternal
                 9.5 -> { context.startActivity(Intent(context, PMTCTInterventionsView::class.java))}
 
                 // Record of Baby’s Teeth Development (Duplicate for clarity if needed)
-                9.6 -> { context.startActivity(Intent(context, PMTCTInterventionsView::class.java))}
+                9.6 -> { context.startActivity(Intent(context, BabyTeethViewRecord::class.java))}
 
                 // Reason for Special Care (Duplicate for additional entry if applicable)
                 9.7 -> { context.startActivity(Intent(context, PMTCTInterventionsView::class.java))}
@@ -145,7 +146,6 @@ class MaternalProfileChildrenAdapter(private var entryList: ArrayList<DbMaternal
 
 
     }
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
