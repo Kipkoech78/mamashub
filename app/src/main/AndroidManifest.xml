@@ -19,6 +19,18 @@
         android:windowSoftInputMode="adjustPan"
         tools:replace="android:allowBackup">
         <activity
+            android:name=".pnc.babyTeethRecord.BabyTeethEdit"
+            android:exported="false" />
+        <activity
+            android:name=".pnc.babyTeethRecord.BabyTeethRecordView"
+            android:exported="false" />
+        <activity
+            android:name=".pnc.babyTeethRecord.BabyTeethViewRecord"
+            android:exported="false" />
+        <activity
+            android:name=".pnc.babyTeethRecord.BabyTeethDevelopmentRecord"
+            android:exported="false" />
+        <activity
             android:name=".pnc.ChildViewActivity"
             android:exported="false" />
         <activity
