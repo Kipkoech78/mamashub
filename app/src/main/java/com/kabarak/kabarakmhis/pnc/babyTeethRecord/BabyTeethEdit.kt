@@ -1,5 +1,6 @@
 package com.kabarak.kabarakmhis.pnc.babyTeethRecord
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
@@ -155,10 +156,14 @@ class BabyTeethEdit : AppCompatActivity() {
                     if (response.isSuccessful) {
                         CoroutineScope(Dispatchers.Main).launch {
                             Toast.makeText(this@BabyTeethEdit, "Data updated successfully.", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this@BabyTeethEdit, BabyTeethDevelopmentRecord::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            startActivity(intent)
                             finish()
                         }
                     } else {
-                        showToast("Failed to update data: ${response.message()}")
+                        showToast("Failed to update data:")
+                        Log.d("Error Update data message", "$response")
                     }
                 }
 
@@ -170,7 +175,6 @@ class BabyTeethEdit : AppCompatActivity() {
             showToast("Failed to retrieve updated response")
         }
     }
-
     private fun showToast(message: String) {
         CoroutineScope(Dispatchers.Main).launch {
             Toast.makeText(this@BabyTeethEdit, message, Toast.LENGTH_SHORT).show()

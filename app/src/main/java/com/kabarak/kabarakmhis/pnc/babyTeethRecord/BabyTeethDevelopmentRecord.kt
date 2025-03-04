@@ -20,6 +20,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class BabyTeethDevelopmentRecord : AppCompatActivity() {
+
     private lateinit var retrofitCallsFhir: RetrofitCallsFhir
     private var questionnaireJsonString: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +50,7 @@ class BabyTeethDevelopmentRecord : AppCompatActivity() {
             QuestionnaireFragment.SUBMIT_REQUEST_KEY,
             this,
         ) { _, _ ->
-            Log.d("ChildAdd", "Submit request received")
+            Log.d("BabyTeeth records", "Submit request received")
             submitQuestionnaire()
         }
     }
@@ -71,42 +72,40 @@ class BabyTeethDevelopmentRecord : AppCompatActivity() {
 
 
     private fun submitQuestionnaire() {
-        // Retrieve the QuestionnaireFragment
         val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container_view)
-        if (fragment is QuestionnaireFragment) {
-            // Get the QuestionnaireResponse from the fragment
-            val questionnaireResponse: QuestionnaireResponse = fragment.getQuestionnaireResponse()
-
-            // Use FHIR's JSON parser to convert QuestionnaireResponse into a JSON string
-            val fhirContext = FhirContext.forR4()
-            val jsonParser = fhirContext.newJsonParser()
-
-            // Serialize the response to a JSON string
-            val questionnaireResponseString = jsonParser.encodeResourceToString(questionnaireResponse)
-
-            // Log the response (you can replace this with saving to a database or sending to a server)
-            Log.d("submitQuestionnaire", questionnaireResponseString)
-
-            // Submit the QuestionnaireResponse to the server using RetrofitCallsFhir
-            retrofitCallsFhir.submitQuestionnaireResponse(questionnaireResponseString, object :
-                Callback<ResponseBody> {
-                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                    if (response.isSuccessful) {
-                        Toast.makeText(this@BabyTeethDevelopmentRecord, "Successfully submitted!", Toast.LENGTH_SHORT).show()
-                        Log.d("ChildAdd", "Successfully submitted the questionnaire response.")
-                    } else {
-                        Toast.makeText(this@BabyTeethDevelopmentRecord, "Submission failed: ${response.message()}", Toast.LENGTH_SHORT).show()
-                        Log.e("Error", "Failed to submit. Response code: ${response.code()}")
-                    }
-                }
-
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Toast.makeText(this@BabyTeethDevelopmentRecord, "Error occurred while submitting: ${t.message}", Toast.LENGTH_SHORT).show()
-                    Log.e("Error", "Error occurred while submitting questionnaire", t)
-                }
-            })
-        } else {
-            Log.e("submitQuestionnaire", "QuestionnaireFragment not found or is null")
+        if (fragment !is QuestionnaireFragment) {
+            Log.e("submitQuestionnaire", "QuestionnaireFragment not found or is incorrect type")
+            return
         }
+
+        val questionnaireResponse: QuestionnaireResponse = fragment.getQuestionnaireResponse()
+        val fhirContext = FhirContext.forR4()
+        val jsonParser = fhirContext.newJsonParser()
+        val questionnaireResponseString = jsonParser.encodeResourceToString(questionnaireResponse)
+
+        Log.d("submitQuestionnaire", questionnaireResponseString)
+
+        retrofitCallsFhir.submitQuestionnaireResponse(questionnaireResponseString, object :
+            Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    showToast("Successfully submitted!")
+                    Log.d("BabyTeeth Records submission", "Successfully submitted the questionnaire response.")
+                } else {
+                    showToast("Submission failed: ${response.message()}")
+                    Log.e("Error", "Failed to submit. Response code: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                showToast("Error occurred while submitting: ${t.message}")
+                Log.e("Error", "Error occurred while submitting questionnaire", t)
+            }
+        })
     }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this@BabyTeethDevelopmentRecord, message, Toast.LENGTH_SHORT).show()
+    }
+
 }

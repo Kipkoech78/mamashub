@@ -1,5 +1,6 @@
 package com.kabarak.kabarakmhis.pnc.babyTeethRecord
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,9 +8,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kabarak.kabarakmhis.R
 import com.kabarak.kabarakmhis.pnc.data_class.BabyTeethRecordDataClass
+import com.kabarak.kabarakmhis.pnc.data_class.DiptheriaDataClass
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class BabyTeethRecordAdapter(
-    private val babyTeethList: List<BabyTeethRecordDataClass>,
+    private val babyTeethList: MutableList<BabyTeethRecordDataClass>,
     private val onItemClick: (String) -> Unit
 ) : RecyclerView.Adapter<BabyTeethRecordAdapter.BabyTeethViewHolder>() {
 
@@ -26,11 +31,27 @@ class BabyTeethRecordAdapter(
             }
         }
 
+
+
+
         fun bind(babyTeethRecord: BabyTeethRecordDataClass) {
+            // Define the input format
+            val inputFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
+
+            // Parse the date
+            val date: Date = inputFormat.parse(babyTeethRecord.ageWhenSeen)!!
+            // Define output formats for date and time
+            val dateFormat = SimpleDateFormat("EEEE, MMM d, yyyy", Locale.ENGLISH)
+            val timeFormat = SimpleDateFormat("hh:mm a ", Locale.ENGLISH)
+
+            // Format date and time separately
+            val formattedDate = dateFormat.format(date)
+            val formattedTime = timeFormat.format(date)
             // Bind data to views
             dateSeenTextView.text = "Age Of Baby: ${babyTeethRecord.dateSeen} Months"
-            ageSeenTextView.text = babyTeethRecord.ageWhenSeen
+            ageSeenTextView.text = "Date: ${formattedDate}   Time: ${formattedTime} "
             teethNumberTextView.text = "Teeth checked: ${babyTeethRecord.teethType}"
+            Log.d("time ", babyTeethRecord.ageWhenSeen)
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BabyTeethViewHolder {

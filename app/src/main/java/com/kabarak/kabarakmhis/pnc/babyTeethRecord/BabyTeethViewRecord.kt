@@ -21,7 +21,6 @@ import com.kabarak.kabarakmhis.fhir.FhirApplication
 import com.kabarak.kabarakmhis.fhir.viewmodels.PatientDetailsViewModel
 import com.kabarak.kabarakmhis.helperclass.FormatterClass
 import com.kabarak.kabarakmhis.network_request.requests.RetrofitCallsFhir
-import com.kabarak.kabarakmhis.pnc.ChildEdit
 import com.kabarak.kabarakmhis.pnc.data_class.BabyTeethRecordDataClass
 import kotlinx.android.synthetic.main.activity_child_birth_view.btnAdd
 import kotlinx.android.synthetic.main.activity_child_birth_view.tvANCID
@@ -38,6 +37,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class BabyTeethViewRecord : AppCompatActivity() {
+
     private lateinit var BabyTeethRecyclerView: RecyclerView
     private lateinit var BabyTeethRecordAdapter: BabyTeethRecordAdapter
     private var BabychildTeeth: MutableList<BabyTeethRecordDataClass> = mutableListOf()
@@ -82,7 +82,7 @@ class BabyTeethViewRecord : AppCompatActivity() {
         noRecordView = findViewById(R.id.no_record)
 
         retrofitCallsFhir = RetrofitCallsFhir()
-        fetchChildrenFromFHIR()
+        fetchBabyTeethFromFHIR()
         fetchPatientData()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -139,13 +139,14 @@ class BabyTeethViewRecord : AppCompatActivity() {
         return Pair(patientData.name, patientData.dob)
     }
 
-    private fun fetchChildrenFromFHIR() {
+    private fun fetchBabyTeethFromFHIR() {
         lifecycleScope.launch(Dispatchers.IO) {
             retrofitCallsFhir.fetchAllQuestionnaireResponses(object : Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     if (response.isSuccessful) {
                         response.body()?.let { responseBody ->
                             val rawResponse = responseBody.string()
+                            Log.d("BabyTeethViewRecord", "Raw Response body: $rawResponse")
                             if (rawResponse.isNotEmpty()) {
                                 try {
                                     val fhirContext = FhirContext.forR4()
@@ -174,7 +175,6 @@ class BabyTeethViewRecord : AppCompatActivity() {
                         }
                     }
                 }
-
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     runOnUiThread {
                         Log.e("ChildViewActivity", "Error occurred while fetching data", t)
@@ -185,32 +185,46 @@ class BabyTeethViewRecord : AppCompatActivity() {
             })
         }
     }
-
-    private fun extractChildrenFromBundle(bundle: org.hl7.fhir.r4.model.Bundle) {
-        for (entry in bundle.entry) {
-            val resource = entry.resource
-            if (resource is QuestionnaireResponse) {
-                extractChildrenFromQuestionnaire(resource)
-            }
+private fun extractChildrenFromBundle(bundle: org.hl7.fhir.r4.model.Bundle) {
+    for (entry in bundle.entry) {
+        val resource = entry.resource
+        if (resource is QuestionnaireResponse) {
+            // Extract child from each QuestionnaireResponse
+            extractChildrenFromQuestionnaire(resource)
         }
-        runOnUiThread { BabyTeethRecordAdapter.notifyDataSetChanged() }
     }
 
-
+    // Notify the adapter to update the UI with the new children data
+    runOnUiThread {
+        BabyTeethRecordAdapter.notifyDataSetChanged()
+    }
+}
+//    private fun extractChildrenFromBundle(bundle: org.hl7.fhir.r4.model.Bundle) {
+//        for (entry in bundle.entry) {
+//            val resource = entry.resource
+//            if (resource is QuestionnaireResponse) {
+//                extractChildrenFromQuestionnaire(resource)
+//            }
+//        }
+//        runOnUiThread { BabyTeethRecordAdapter.notifyDataSetChanged() }
+//    }
     private fun extractChildrenFromQuestionnaire(questionnaireResponse: QuestionnaireResponse) {
         val responseId = questionnaireResponse.id
-        if (BabychildTeeth.any { it.id == responseId }) return
-
+        if (BabychildTeeth.any { it.id == responseId }){
+            Log.d("BabyTeethView ", "Teeth Record with ID $responseId already exists. Skipping duplicate.")
+            return
+        }
+    Log.d("Linus Teeth LInk Id", "Item linkId: ${questionnaireResponse.item}")
         for (item in questionnaireResponse.item) {
-            Log.d("BabyTeethViewRecord", "Item linkId: ${item.linkId}")
-            if (item.linkId == "bce1a121-541a-469c-a48b-5ffdfff9348a") {
+            Log.d("Baby Teeth LInk Id", "Item linkId: ${item.linkId}")
+            if (item.linkId =="bce1a121-541a-469c-a48b-5ffdfff9348a") {
                 for (answerItem in item.answer) {
                     val teethType = answerItem.valueCoding?.code
                     var ageSeen: String? = null
                     var dateSeen: String? = null
 
                     for (subItem in answerItem.item) {
-                        Log.d("BabyTeethViewRecord", "SubItem linkId: ${subItem.linkId}")
+                        //Log.d("BabyTeethViewRecord", "SubItem linkId: ${subItem.linkId}")
 
                         when (subItem.linkId) {
                             "f1ed5d7d-620c-4616-d65a-116d230eaed2" -> ageSeen = subItem.answer.firstOrNull()?.valueIntegerType?.value?.toString()
