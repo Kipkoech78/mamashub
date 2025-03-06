@@ -19,19 +19,7 @@
         android:windowSoftInputMode="adjustPan"
         tools:replace="android:allowBackup">
         <activity
-            android:name=".pnc.Diphtheria.DiptheriaAdapter"
-            android:exported="false" />
-        <activity
-            android:name=".pnc.Diphtheria.DiptheriaView"
-            android:exported="false" />
-        <activity
-            android:name=".pnc.Diphtheria.DiptheriaAdd"
-            android:exported="false" />
-        <activity
             android:name=".pnc.babyTeethRecord.BabyTeethEdit"
-            android:exported="false" />
-        <activity
-            android:name=".pnc.babyTeethRecord.BabyTeethRecordView"
             android:exported="false" />
         <activity
             android:name=".pnc.babyTeethRecord.BabyTeethViewRecord"
@@ -115,6 +103,9 @@
         <activity
             android:name=".pnc.child_civil_registration.CivilRegistrationDetails"
             android:exported="false"/>
+<!--        <activity-->
+<!--            android:name=".pnc.ChildView"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".pnc.ChildEdit"
             android:exported="false" />
