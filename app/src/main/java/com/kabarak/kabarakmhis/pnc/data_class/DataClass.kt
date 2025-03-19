@@ -30,12 +30,14 @@ data class CongenitalAbnormality(
     val description: String,
     val remarks: String?
 )
+
 data class BcgVaccination(
     val id: String,
     val status: String,
     val dateGiven: String?,
     val dateOfNextVisit: String?,
     val batchNumber: String?,
+)
     val lotNumber: String?,
     val manufacturer: String?,
     val dateOfExpiry: String?
@@ -62,6 +64,7 @@ data class MeaslesImmunization(
     val manufacturer: String?,
     val dateOfExpiry: String?
 )
+
 data class ChildItem(
     val id: String,
     val name: String,
@@ -75,6 +78,7 @@ data class CivilRegistration(
     val sexOfChild: String,
     val birthDate: String,
 )
+
 data class IPV(
     val id: String,
     val dateGiven: String,
@@ -91,6 +95,7 @@ data class Diphtheria(
     val manufacturer: String?,
     val expiryDate: String?
 )
+
 data class Milestone(
     val id: String,
     val visit: String,
@@ -101,6 +106,20 @@ data class Milestone(
 data class QuestionnaireDetails(
     val detailQuestion: String,
     val detailAnswer: String,
+)
+
+data class CancerScreening(
+    val id: String,
+    val type: String,
+    val date: String,
+    val responseId: String,
+
+)
+
+data class EyeProblems(
+    val id: String,
+    val VisitType: String,
+    val VisitDate: String,
 )
 
 data class BroadClinical(
