@@ -37,7 +37,6 @@ data class BcgVaccination(
     val dateGiven: String?,
     val dateOfNextVisit: String?,
     val batchNumber: String?,
-)
     val lotNumber: String?,
     val manufacturer: String?,
     val dateOfExpiry: String?
