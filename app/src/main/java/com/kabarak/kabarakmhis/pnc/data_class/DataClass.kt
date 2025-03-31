@@ -37,10 +37,6 @@ data class BcgVaccination(
     val dateGiven: String?,
     val dateOfNextVisit: String?,
     val batchNumber: String?,
-<<<<<<< HEAD
-=======
-
->>>>>>> 2de8722 (Fix: Update DataClass.kt)
     val lotNumber: String?,
     val manufacturer: String?,
     val dateOfExpiry: String?
@@ -144,4 +140,10 @@ data class Vaccines(
     val id: String,
     val VaccineName: String,
     val VaccineDate: String,
+)
+data class BabyTeethRecordDataClass(
+    val id: String,
+    val dateSeen: String,
+    val ageWhenSeen: String,
+    val teethType: String?
 )

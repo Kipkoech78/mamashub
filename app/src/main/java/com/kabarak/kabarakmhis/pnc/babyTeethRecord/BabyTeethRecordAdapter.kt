@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kabarak.kabarakmhis.R
 import com.kabarak.kabarakmhis.pnc.data_class.BabyTeethRecordDataClass
-import com.kabarak.kabarakmhis.pnc.data_class.DiptheriaDataClass
+
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
