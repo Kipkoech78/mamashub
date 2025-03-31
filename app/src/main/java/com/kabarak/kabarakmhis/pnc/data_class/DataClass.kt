@@ -37,6 +37,10 @@ data class BcgVaccination(
     val dateGiven: String?,
     val dateOfNextVisit: String?,
     val batchNumber: String?,
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2de8722 (Fix: Update DataClass.kt)
     val lotNumber: String?,
     val manufacturer: String?,
     val dateOfExpiry: String?
